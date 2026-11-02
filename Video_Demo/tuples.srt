@@ -1,0 +1,63 @@
+1
+00:00:00,300 --> 00:00:02,000
+A tuple is an ordered
+
+2
+00:00:02,000 --> 00:00:04,600
+collection, created with parentheses.
+
+3
+00:00:05,700 --> 00:00:07,800
+Access items by index,
+
+4
+00:00:07,800 --> 00:00:09,300
+starting at zero.
+
+5
+00:00:09,300 --> 00:00:11,300
+Negative counts from the end.
+
+6
+00:00:11,700 --> 00:00:13,600
+But tuples are immutable.
+
+7
+00:00:13,600 --> 00:00:15,400
+Try to change one,
+
+8
+00:00:15,400 --> 00:00:17,400
+and Python raises an error.
+
+9
+00:00:17,700 --> 00:00:19,800
+You can unpack a tuple
+
+10
+00:00:19,800 --> 00:00:22,600
+into variables in one line.
+
+11
+00:00:23,700 --> 00:00:25,400
+Careful with one item!
+
+12
+00:00:25,400 --> 00:00:27,400
+You need a trailing comma,
+
+13
+00:00:27,400 --> 00:00:29,400
+or it's not a tuple.
+
+14
+00:00:29,700 --> 00:00:31,600
+Use tuples for fixed data,
+
+15
+00:00:31,600 --> 00:00:33,500
+like coordinates or colors.
+
+16
+00:00:33,500 --> 00:00:35,800
+Follow for more Python!
