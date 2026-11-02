@@ -1,16 +1,15 @@
 {
-  "name": "HyperFrames & Claude Code Dev Environment",
+  "name": "HyperFrames Studio",
   "image": "://microsoft.com",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/node:1": {}
   },
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && npx hyperframes skills update",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "GitHub.copilot",
-        "GitHub.copilot-chat"
-      ]
+  "updateContentCommand": "sudo apt-get update && sudo apt-get install -y ffmpeg libgbm1 libnss3 libatk-bridge2.0-0 libgtk-3-0 libasound2 && npx @puppeteer/browsers install chrome-headless-shell@152.0.7977.30 --path /home/node/.cache/puppeteer",
+  "forwardPorts": [3000, 8080],
+  "portsAttributes": {
+    "3000": {
+      "label": "HyperFrames Preview Studio",
+      "onAutoForward": "openBrowser"
     }
   }
 }
