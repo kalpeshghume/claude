@@ -1,62 +1,62 @@
 1
 00:00:00,300 --> 00:00:02,000
-A tuple is an ordered
+A dictionary stores
 
 2
 00:00:02,000 --> 00:00:04,600
-collection, created with parentheses.
+key-value pairs in curly braces.
 
 3
 00:00:05,700 --> 00:00:07,800
-Access items by index,
+Look up a value by its key,
 
 4
 00:00:07,800 --> 00:00:09,300
-starting at zero.
+it's instant.
 
 5
 00:00:09,300 --> 00:00:11,300
-Negative counts from the end.
+Use .get() if the key may be missing.
 
 6
 00:00:11,700 --> 00:00:13,600
-But tuples are immutable.
+Dictionaries are mutable.
 
 7
 00:00:13,600 --> 00:00:15,400
-Try to change one,
+Add or update a key
 
 8
 00:00:15,400 --> 00:00:17,400
-and Python raises an error.
+and the dict changes in place.
 
 9
 00:00:17,700 --> 00:00:19,800
-You can unpack a tuple
+Loop over .items()
 
 10
 00:00:19,800 --> 00:00:22,600
-into variables in one line.
+to get each key and value together.
 
 11
 00:00:23,700 --> 00:00:25,400
-Careful with one item!
+Missing key?
 
 12
 00:00:25,400 --> 00:00:27,400
-You need a trailing comma,
+person["city"] raises KeyError,
 
 13
 00:00:27,400 --> 00:00:29,400
-or it's not a tuple.
+so use .get() instead.
 
 14
 00:00:29,700 --> 00:00:31,600
-Use tuples for fixed data,
+Use dicts for labelled data,
 
 15
 00:00:31,600 --> 00:00:33,500
-like coordinates or colors.
+like a profile or a config.
 
 16
 00:00:33,500 --> 00:00:35,800
