@@ -1,0 +1,16 @@
+{
+  "name": "HyperFrames & Claude Code Dev Environment",
+  "image": "://microsoft.com",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && npx hyperframes skills update",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ]
+    }
+  }
+}
