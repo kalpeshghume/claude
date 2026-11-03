@@ -1,7 +1,7 @@
 {
   "version": 1,
   "historyId": "240bdb5f-b33a-46ea-866e-7b3be8e6bc2d",
-  "currentRevision": "b7777a9a-aec4-4357-ac3c-a46bca910e9d",
+  "currentRevision": "920ab6f9-56d2-4b65-9373-b49173f0ae70",
   "pendingChanges": false,
   "files": {
     "assets/fonts/Inter-400.woff2": {
@@ -29,8 +29,8 @@
       "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/3e/3e583a18e456fa18b9cfb31774c08cbf6a11b6f0ffae8320c5cc62f9ee6db1ee"
     },
     "index.html": {
-      "hash": "816f8e23120d6f2ecad50b306075fcae1b3fb4054630015e76c9ca729c83556e",
-      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/81/816f8e23120d6f2ecad50b306075fcae1b3fb4054630015e76c9ca729c83556e"
+      "hash": "c46ded22b07bcdd46b46fae6abcb588ea54f44680e370950fd2b215e13b2a7f8",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/c4/c46ded22b07bcdd46b46fae6abcb588ea54f44680e370950fd2b215e13b2a7f8"
     },
     "dicts.srt": {
       "hash": "848989877914986c472602a5a296bfe0dede46d23eadc683c4e83762e1b8f7cd",
@@ -62,6 +62,21 @@
         "narration.txt": {
           "before": null,
           "after": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/33/33e0fc6b079a74c450a1044eb79dc98dfddff548c9221eefa36f582956e660ef"
+        }
+      }
+    },
+    "920ab6f9-56d2-4b65-9373-b49173f0ae70": {
+      "actor": {
+        "kind": "person",
+        "name": "You"
+      },
+      "label": "Add GSAP to animation",
+      "startedAt": 1793698729385,
+      "endedAt": 1793698729385,
+      "files": {
+        "index.html": {
+          "before": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/81/816f8e23120d6f2ecad50b306075fcae1b3fb4054630015e76c9ca729c83556e",
+          "after": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/c4/c46ded22b07bcdd46b46fae6abcb588ea54f44680e370950fd2b215e13b2a7f8"
         }
       }
     }

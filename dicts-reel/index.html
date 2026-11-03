@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -71,7 +71,7 @@
 <body>
 <div data-hf-id="hf-5ve3" id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
 
-  <div data-hf-id="hf-uumm" id="chrome" data-layout-ignore>
+  <div data-hf-id="hf-uumm" id="chrome" data-layout-ignore="">
     <div data-hf-id="hf-kyp1" id="tabbar"><div data-hf-id="hf-pl7k" id="tab"><span data-hf-id="hf-4cjg" class="py"></span>dicts.py</div></div>
     <div data-hf-id="hf-q8fr" id="term"><div data-hf-id="hf-7qr0" class="hd">TERMINAL</div></div>
     <div data-hf-id="hf-f0s0" id="texwrap"><div data-hf-id="hf-fbo1" class="tex" style="top:24px"><span data-hf-id="hf-ikog"> 1</span> person = {"name": "Ada"}</div><div data-hf-id="hf-a5tc" class="tex" style="top:60px"><span data-hf-id="hf-hdrd"> 2</span> person["age"] = 36</div><div data-hf-id="hf-n9qh" class="tex" style="top:96px"><span data-hf-id="hf-hs2e"> 3</span> print(person.keys())</div><div data-hf-id="hf-8wsg" class="tex" style="top:132px"><span data-hf-id="hf-gl5b"> 4</span> print(person.values())</div><div data-hf-id="hf-zs2s" class="tex" style="top:168px"><span data-hf-id="hf-gzgc"> 5</span> for k, v in person.items():</div><div data-hf-id="hf-5lmz" class="tex" style="top:204px"><span data-hf-id="hf-fsj9"> 6</span> person.get("city", "n/a")</div><div data-hf-id="hf-3zg3" class="tex" style="top:240px"><span data-hf-id="hf-g6ua"> 7</span> "age" in person</div><div data-hf-id="hf-ay9k" class="tex" style="top:276px"><span data-hf-id="hf-ezx7"> 8</span> del person["age"]</div><div data-hf-id="hf-ei5u" class="tex" style="top:312px"><span data-hf-id="hf-fe88"> 9</span> d = dict(name="Ada")</div><div data-hf-id="hf-j2na" class="tex" style="top:348px"><span data-hf-id="hf-2xa8">10</span> len(person)</div><div data-hf-id="hf-2nxr" class="tex" style="top:384px"><span data-hf-id="hf-2iz7">11</span> person.update({"x": 1})</div><div data-hf-id="hf-387r" class="tex" style="top:420px"><span data-hf-id="hf-24o6">12</span> scores = {"math": 92}</div><div data-hf-id="hf-ujn2" class="tex" style="top:456px"><span data-hf-id="hf-1qd5">13</span> scores.setdefault("eng", 0)</div></div>
@@ -238,6 +238,7 @@
   tl.fromTo("#s6-cta", {"opacity":0,"scale":0.9}, {"opacity":1,"scale":1,"duration":0.45,"ease":"back.out(1.6)"}, 33.400);
   tl.fromTo("#s6-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 29.500);
   tl.to("#s6-wrap", {"opacity":0,"duration":0.12}, 35.860);
+tl.to("#cap15", { x: 0, y: 0, opacity: 1, duration: 2.3, ease: "power2.out" }, 33.5);
   window.__timelines["main"] = tl;
 </script>
 </body>
