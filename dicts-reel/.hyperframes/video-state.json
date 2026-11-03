@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "historyId": "240bdb5f-b33a-46ea-866e-7b3be8e6bc2d",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "assets/fonts/Inter-400.woff2": {
+      "hash": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/89/8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc"
+    },
+    "assets/fonts/Inter-700.woff2": {
+      "hash": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/6f/6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491"
+    },
+    "assets/fonts/JetBrainsMono-400.woff2": {
+      "hash": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/14/14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb"
+    },
+    "assets/fonts/JetBrainsMono-700.woff2": {
+      "hash": "d0d4e818808f2a0ba39b2b09d1989366f63494e295f003c7ef436697378507e8",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/d0/d0d4e818808f2a0ba39b2b09d1989366f63494e295f003c7ef436697378507e8"
+    },
+    "assets/gsap.min.js": {
+      "hash": "7b2c91e3bff9022bef50054413b365a945c93f87285dcf8bdfb92076c4c56304",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/7b/7b2c91e3bff9022bef50054413b365a945c93f87285dcf8bdfb92076c4c56304"
+    },
+    "build.mjs": {
+      "hash": "3e583a18e456fa18b9cfb31774c08cbf6a11b6f0ffae8320c5cc62f9ee6db1ee",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/3e/3e583a18e456fa18b9cfb31774c08cbf6a11b6f0ffae8320c5cc62f9ee6db1ee"
+    },
+    "index.html": {
+      "hash": "81af236bd42604db0e3c8162359724d851096c6da850cf69e860186f9ddb8fb2",
+      "content": "/home/codespace/.cache/hyperframes/history/240bdb5f-b33a-46ea-866e-7b3be8e6bc2d/blobs/81/81af236bd42604db0e3c8162359724d851096c6da850cf69e860186f9ddb8fb2"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  }
+}

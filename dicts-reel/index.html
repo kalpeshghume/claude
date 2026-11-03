@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Python Tuples in 30s</title>
+<style>
+  @font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/JetBrainsMono-400.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-700.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/Inter-400.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/Inter-700.woff2") format("woff2"); }
+  :root { --bg:#1e1e1e; --panel:#252526; --term:#181818; --line:#2d2d2d; --fg:#d4d4d4; --blue:#007acc; --teal:#4ec9b0; --orange:#ce9178; --yellow:#ffd43b; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; background: var(--bg); overflow: hidden; }
+  body { font-family: "Inter", sans-serif; color: var(--fg); }
+  #root { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: var(--bg); overflow: hidden; }
+  .mono, .ln, .tline, .cell, .var, .big, .paren, .ix, .badge { font-family: "JetBrains Mono", monospace; }
+
+  /* IDE chrome */
+  #tabbar { position: absolute; left: 0; top: 168px; width: 1080px; height: 84px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  #tab { position: absolute; left: 108px; top: 0; width: 380px; height: 84px; background: var(--bg); border-top: 4px solid var(--blue); display: flex; align-items: center; gap: 16px; padding-left: 24px; font-size: 32px; color: #fff; }
+  #tab .py { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg,#3776ab 50%,#ffd43b 50%); }
+  #term { position: absolute; left: 0; top: 1006px; width: 1080px; height: 200px; background: var(--term); border-top: 2px solid #2b2b2b; }
+  #term .hd { position: absolute; left: 108px; top: 8px; font-size: 28px; letter-spacing: 3px; color: #bbb; border-bottom: 3px solid var(--blue); padding-bottom: 2px; }
+  #status { position: absolute; left: 0; top: 1836px; width: 1080px; height: 84px; background: var(--blue); }
+  #status span { position: absolute; top: 24px; font-size: 28px; color: #fff; }
+  #texwrap { position: absolute; left: 0; top: 1330px; width: 1080px; height: 506px; background: var(--bg); overflow: hidden; }
+  .tex { position: absolute; left: 108px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: #fff; opacity: .2; white-space: pre; }
+  .tex span { color: #fff; margin-right: 24px; }
+  #texwrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30,30,30,.0), rgba(30,30,30,.75)); }
+
+  .step { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .wrap { position: absolute; inset: 0; }
+  .chip { position: absolute; left: 108px; top: 284px; padding: 6px 18px; border-radius: 999px; background: rgba(0,122,204,.22); color: #4fc1ff; font-weight: 700; font-size: 28px; letter-spacing: 2px; }
+  .title { position: absolute; left: 108px; top: 332px; font-weight: 700; font-size: 68px; color: #fff; white-space: nowrap; line-height: 90px; }
+  .gutter-line { position: absolute; left: 160px; top: 440px; width: 2px; height: 236px; background: #2f2f2f; }
+  .ln { position: absolute; left: 108px; height: 76px; line-height: 76px; font-size: 38px; white-space: pre; }
+  .ln .no { display: inline-block; width: 52px; color: #858585; text-align: left; }
+  .ln .tx { display: inline-block; margin-left: 12px; white-space: pre; }
+  .v{color:#9cdcfe} .o{color:#d4d4d4} .n{color:#b5cea8} .s{color:#ce9178} .f{color:#dcdcaa} .c{color:#6a9955}
+
+  .dg { position: absolute; left: 0; top: 700px; width: 1080px; height: 290px; }
+  .row { position: absolute; left: 216px; top: 70px; display: flex; gap: 24px; }
+  .row.two { left: 324px; }
+  .cell { position: relative; width: 200px; height: 110px; border: 3px solid #454545; border-radius: 14px; background: #252526; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+  .cell .n { color: #b5cea8; font-size: 48px; } .cell .s { color: #ce9178; }
+  .ix { position: absolute; width: 100%; text-align: center; font-size: 30px; font-weight: 700; }
+  .ix.top { top: -50px; color: var(--teal); } .ix.bot { bottom: -50px; color: var(--orange); }
+  .paren { position: absolute; top: 40px; font-size: 150px; line-height: 150px; color: #5a5a5a; font-weight: 400; }
+  .paren.l { left: 112px; } .paren.r { right: 112px; }
+  .badge { position: absolute; left: 50%; top: 214px; margin-left: -130px; width: 260px; text-align: center; padding: 8px 0; border-radius: 12px; background: rgba(244,135,113,.15); border: 2px solid #f48771; color: #f48771; font-weight: 700; font-size: 30px; letter-spacing: 3px; }
+  .arrows { position: absolute; left: 324px; top: 190px; display: flex; gap: 24px; font-size: 40px; color: var(--teal); }
+  .arrows span { width: 200px; text-align: center; font-family: "JetBrains Mono", monospace; }
+  .vars { position: absolute; left: 324px; top: 238px; display: flex; gap: 24px; }
+  .var { width: 200px; text-align: center; font-size: 34px; color: #9cdcfe; }
+  .cmp { position: absolute; top: 40px; width: 420px; height: 210px; border-radius: 18px; border: 3px solid; text-align: center; }
+  .cmp.bad { left: 108px; border-color: #f48771; background: rgba(244,135,113,.08); }
+  .cmp.good { right: 108px; border-color: var(--teal); background: rgba(78,201,176,.10); }
+  .cmp .big { font-size: 78px; font-weight: 700; color: #fff; margin-top: 30px; }
+  .cmp .lab { font-size: 38px; margin-top: 12px; font-weight: 700; }
+  .bad .lab { color: #f48771; } .good .lab { color: var(--teal); }
+
+  .tline { position: absolute; left: 108px; top: 1058px; font-size: 32px; color: #cccccc; white-space: pre; }
+  .tline.prompt { color: #6a9955; }
+  .tline.err { color: #f48771; }
+
+  .rrow { position: absolute; left: 108px; width: 864px; display: flex; align-items: center; gap: 28px; font-size: 44px; line-height: 56px; }
+  #s6-r0 { top: 440px; } #s6-r1 { top: 575px; } #s6-r2 { top: 710px; }
+  .rrow b { color: #fff; font-size: 52px; } .rrow i { font-style: normal; color: #9aa0a6; font-size: 34px; }
+  .dot { width: 26px; height: 26px; border-radius: 50%; background: var(--teal); flex: none; }
+  .cta { position: absolute; left: 108px; top: 868px; width: 864px; text-align: center; padding: 22px 0; border-radius: 20px; background: var(--yellow); color: #1e1e1e; font-weight: 700; font-size: 48px; }
+
+  #caps { position: absolute; left: 0; top: 1214px; width: 1080px; height: 116px; }
+  .cap { position: absolute; left: 108px; top: 0; width: 864px; height: 116px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .cap .ct { font-weight: 700; font-size: 48px; line-height: 58px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.9); }
+</style>
+</head>
+<body>
+<div data-hf-id="hf-5ve3" id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
+
+  <div data-hf-id="hf-uumm" id="chrome" data-layout-ignore>
+    <div data-hf-id="hf-kyp1" id="tabbar"><div data-hf-id="hf-6iji" id="tab"><span data-hf-id="hf-4cjg" class="py"></span>tuples.py</div></div>
+    <div data-hf-id="hf-q8fr" id="term"><div data-hf-id="hf-7qr0" class="hd">TERMINAL</div></div>
+    <div data-hf-id="hf-f0s0" id="texwrap"><div data-hf-id="hf-0fo3" class="tex" style="top:24px"><span data-hf-id="hf-ikog"> 1</span> point = (10, 20)</div><div data-hf-id="hf-l5wq" class="tex" style="top:60px"><span data-hf-id="hf-hdrd"> 2</span> colors = ("red", "green")</div><div data-hf-id="hf-c8w3" class="tex" style="top:96px"><span data-hf-id="hf-hs2e"> 3</span> x, y = point</div><div data-hf-id="hf-l53m" class="tex" style="top:132px"><span data-hf-id="hf-gl5b"> 4</span> print(colors[0])</div><div data-hf-id="hf-nek6" class="tex" style="top:168px"><span data-hf-id="hf-gzgc"> 5</span> one = (5,)</div><div data-hf-id="hf-0fwv" class="tex" style="top:204px"><span data-hf-id="hf-fsj9"> 6</span> t = tuple([1, 2])</div><div data-hf-id="hf-zwzq" class="tex" style="top:240px"><span data-hf-id="hf-g6ua"> 7</span> len(colors)</div><div data-hf-id="hf-8cik" class="tex" style="top:276px"><span data-hf-id="hf-ezx7"> 8</span> colors.count("red")</div><div data-hf-id="hf-3vkj" class="tex" style="top:312px"><span data-hf-id="hf-fe88"> 9</span> colors.index("blue")</div><div data-hf-id="hf-r60v" class="tex" style="top:348px"><span data-hf-id="hf-2xa8">10</span> a, *rest = colors</div><div data-hf-id="hf-55zi" class="tex" style="top:384px"><span data-hf-id="hf-2iz7">11</span> nested = ((1, 2), (3, 4))</div><div data-hf-id="hf-cljx" class="tex" style="top:420px"><span data-hf-id="hf-24o6">12</span> for c in colors:</div><div data-hf-id="hf-us04" class="tex" style="top:456px"><span data-hf-id="hf-1qd5">13</span>     print(c)</div></div>
+    <div data-hf-id="hf-odm3" id="status"><span data-hf-id="hf-1tag" style="left:108px">Python 3.12</span><span data-hf-id="hf-k5q3" style="right:108px">UTF-8</span></div>
+  </div>
+
+  <div data-hf-id="hf-rixd" id="s1" class="clip step" data-start="0" data-duration="5.5" data-track-index="1">
+    <div data-hf-id="hf-8vcf" class="wrap" id="s1-wrap"><div data-hf-id="hf-9bim" class="chip" id="s1-chip">STEP 1</div><div data-hf-id="hf-vf2d" class="title" id="s1-title">Python Tuples in 30s</div><div data-hf-id="hf-z4gs" class="gutter-line"></div><div data-hf-id="hf-w453" class="ln" id="s1-l0" style="top:456px"><span data-hf-id="hf-kh2n" class="no">1</span><span data-hf-id="hf-dkf0" class="tx" id="s1-t0"><span data-hf-id="hf-dry5" class="v">point</span><span data-hf-id="hf-50av" class="o"> = (</span><span data-hf-id="hf-yee0" class="n">10</span><span data-hf-id="hf-l2wk" class="o">, </span><span data-hf-id="hf-yjyr" class="n">20</span><span data-hf-id="hf-m9tn" class="o">)</span></span></div><div data-hf-id="hf-txpx" class="ln" id="s1-l1" style="top:532px"><span data-hf-id="hf-k2rm" class="no">2</span><span data-hf-id="hf-ec2t" class="tx" id="s1-t1"><span data-hf-id="hf-wyk5" class="v">colors</span><span data-hf-id="hf-h4o7" class="o"> = (</span><span data-hf-id="hf-j7sx" class="s">"red"</span><span data-hf-id="hf-gqh8" class="o">, </span><span data-hf-id="hf-kekt" class="s">"green"</span><span data-hf-id="hf-fjk5" class="o">, </span><span data-hf-id="hf-7yrs" class="s">"blue"</span><span data-hf-id="hf-oxyz" class="o">)</span></span></div><div data-hf-id="hf-qf1m" class="ln" id="s1-l2" style="top:608px"><span data-hf-id="hf-jogl" class="no">3</span><span data-hf-id="hf-ia6u" class="tx" id="s1-t2"><span data-hf-id="hf-frjw" class="f">print</span><span data-hf-id="hf-mo4o" class="o">(</span><span data-hf-id="hf-kfft" class="v">colors</span><span data-hf-id="hf-ojny" class="o">)</span></span></div><div data-hf-id="hf-lodl" class="dg" id="s1-dg">
+      <div data-hf-id="hf-gw08" class="paren l">(</div><div data-hf-id="hf-ste5" class="paren r">)</div>
+      <div data-hf-id="hf-m0fd" class="row" id="s1-row">
+        <div data-hf-id="hf-ddbm" class="cell" id="s1-c0">
+          <span data-hf-id="hf-toph" class="s">"red"</span></div><div data-hf-id="hf-hbfn" class="cell" id="s1-c1">
+          <span data-hf-id="hf-jq4h" class="s">"green"</span></div><div data-hf-id="hf-8njs" class="cell" id="s1-c2">
+          <span data-hf-id="hf-gym8" class="s">"blue"</span></div>
+      </div></div><div data-hf-id="hf-mdso" class="tline prompt" id="s1-o0">$ python tuples.py</div><div data-hf-id="hf-k8r1" class="tline" id="s1-o1" style="top:1102px">('red', 'green', 'blue')</div></div>
+  </div>
+
+  <div data-hf-id="hf-8n1s" id="s2" class="clip step" data-start="5.5" data-duration="6" data-track-index="1">
+    <div data-hf-id="hf-r1xy" class="wrap" id="s2-wrap"><div data-hf-id="hf-oqdm" class="chip" id="s2-chip">STEP 2</div><div data-hf-id="hf-3qlh" class="title" id="s2-title">Access by index</div><div data-hf-id="hf-i3bo" class="gutter-line"></div><div data-hf-id="hf-cjh6" class="ln" id="s2-l0" style="top:456px"><span data-hf-id="hf-a55b" class="no">1</span><span data-hf-id="hf-no4l" class="tx" id="s2-t0"><span data-hf-id="hf-lmcw" class="v">colors</span><span data-hf-id="hf-gqd6" class="o"> = (</span><span data-hf-id="hf-uvmk" class="s">"red"</span><span data-hf-id="hf-fxv6" class="o">, </span><span data-hf-id="hf-kx1k" class="s">"green"</span><span data-hf-id="hf-hxeb" class="o">, </span><span data-hf-id="hf-frp5" class="s">"blue"</span><span data-hf-id="hf-o5cx" class="o">)</span></span></div><div data-hf-id="hf-ajz8" class="ln" id="s2-l1" style="top:532px"><span data-hf-id="hf-xe92" class="no">2</span><span data-hf-id="hf-mwgs" class="tx" id="s2-t1"><span data-hf-id="hf-fe0k" class="f">print</span><span data-hf-id="hf-ntsw" class="o">(</span><span data-hf-id="hf-l81v" class="v">colors</span><span data-hf-id="hf-f4b5" class="o">[</span><span data-hf-id="hf-dpmz" class="n">0</span><span data-hf-id="hf-pfi2" class="o">])</span></span></div><div data-hf-id="hf-6kyr" class="ln" id="s2-l2" style="top:608px"><span data-hf-id="hf-ddqh" class="no">3</span><span data-hf-id="hf-xryf" class="tx" id="s2-t2"><span data-hf-id="hf-e73h" class="f">print</span><span data-hf-id="hf-mmvt" class="o">(</span><span data-hf-id="hf-j8iq" class="v">colors</span><span data-hf-id="hf-1ptx" class="o">[</span><span data-hf-id="hf-12tz" class="n">-1</span><span data-hf-id="hf-glem" class="o">])</span></span></div><div data-hf-id="hf-x8z8" class="dg" id="s2-dg">
+      <div data-hf-id="hf-0qyo" class="paren l">(</div><div data-hf-id="hf-o3y9" class="paren r">)</div>
+      <div data-hf-id="hf-dcz2" class="row" id="s2-row">
+        <div data-hf-id="hf-2wf3" class="cell" id="s2-c0">
+          <span data-hf-id="hf-5q3h" class="ix top">0</span><span data-hf-id="hf-xgpp" class="ix bot">-3</span><span data-hf-id="hf-uhbj" class="s">"red"</span></div><div data-hf-id="hf-yyb2" class="cell" id="s2-c1">
+          <span data-hf-id="hf-64ei" class="ix top">1</span><span data-hf-id="hf-xv0q" class="ix bot">-2</span><span data-hf-id="hf-kiqj" class="s">"green"</span></div><div data-hf-id="hf-v071" class="cell" id="s2-c2">
+          <span data-hf-id="hf-6ipj" class="ix top">2</span><span data-hf-id="hf-y9br" class="ix bot">-1</span><span data-hf-id="hf-g606" class="s">"blue"</span></div>
+      </div></div><div data-hf-id="hf-lnjd" class="tline prompt" id="s2-o0">$ python tuples.py</div><div data-hf-id="hf-lyfs" class="tline" id="s2-o1" style="top:1102px">red</div><div data-hf-id="hf-9268" class="tline" id="s2-o2" style="top:1146px">blue</div></div>
+  </div>
+
+  <div data-hf-id="hf-n85s" id="s3" class="clip step" data-start="11.5" data-duration="6" data-track-index="1">
+    <div data-hf-id="hf-r8x5" class="wrap" id="s3-wrap"><div data-hf-id="hf-oymq" class="chip" id="s3-chip">STEP 3</div><div data-hf-id="hf-igr4" class="title" id="s3-title">Immutable!</div><div data-hf-id="hf-gwel" class="gutter-line"></div><div data-hf-id="hf-bm8t" class="ln" id="s3-l0" style="top:456px"><span data-hf-id="hf-9qua" class="no">1</span><span data-hf-id="hf-isva" class="tx" id="s3-t0"><span data-hf-id="hf-iu7p" class="v">colors</span><span data-hf-id="hf-gc25" class="o"> = (</span><span data-hf-id="hf-vo8m" class="s">"red"</span><span data-hf-id="hf-ibpc" class="o">, </span><span data-hf-id="hf-ij7e" class="s">"green"</span><span data-hf-id="hf-h4s9" class="o">, </span><span data-hf-id="hf-ez33" class="s">"blue"</span><span data-hf-id="hf-nr1w" class="o">)</span></span></div><div data-hf-id="hf-4wyv" class="ln" id="s3-l1" style="top:532px"><span data-hf-id="hf-xsk3" class="no">2</span><span data-hf-id="hf-oyl3" class="tx" id="s3-t1"><span data-hf-id="hf-k14s" class="v">colors</span><span data-hf-id="hf-2wr0" class="o">[</span><span data-hf-id="hf-ztyj" class="n">0</span><span data-hf-id="hf-7tp4" class="o">] = </span><span data-hf-id="hf-a68k" class="s">"pink"</span></span></div><div data-hf-id="hf-uny3" class="dg" id="s3-dg">
+      <div data-hf-id="hf-zk1l" class="paren l">(</div><div data-hf-id="hf-pavc" class="paren r">)</div>
+      <div data-hf-id="hf-a857" class="row" id="s3-row">
+        <div data-hf-id="hf-qh4g" class="cell" id="s3-c0">
+          <span data-hf-id="hf-v9xl" class="s">"red"</span></div><div data-hf-id="hf-r8s9" class="cell" id="s3-c1">
+          <span data-hf-id="hf-i4wd" class="s">"green"</span></div><div data-hf-id="hf-xei2" class="cell" id="s3-c2">
+          <span data-hf-id="hf-fde4" class="s">"blue"</span></div>
+      </div><div data-hf-id="hf-9p01" class="badge" id="s3-badge">IMMUTABLE</div></div><div data-hf-id="hf-1ipq" class="tline prompt" id="s3-o0">$ python tuples.py</div><div data-hf-id="hf-qlsi" class="tline err" id="s3-o1" style="top:1102px">TypeError: 'tuple' object does not</div><div data-hf-id="hf-74zn" class="tline err" id="s3-o2" style="top:1146px">support item assignment</div></div>
+  </div>
+
+  <div data-hf-id="hf-2rlt" id="s4" class="clip step" data-start="17.5" data-duration="6" data-track-index="1">
+    <div data-hf-id="hf-855s" class="wrap" id="s4-wrap"><div data-hf-id="hf-lra6" class="chip" id="s4-chip">STEP 4</div><div data-hf-id="hf-yr3u" class="title" id="s4-title">Unpacking</div><div data-hf-id="hf-hapm" class="gutter-line"></div><div data-hf-id="hf-w8ns" class="ln" id="s4-l0" style="top:456px"><span data-hf-id="hf-9cj9" class="no">1</span><span data-hf-id="hf-4yg7" class="tx" id="s4-t0"><span data-hf-id="hf-9r69" class="v">point</span><span data-hf-id="hf-j47c" class="o"> = (</span><span data-hf-id="hf-blps" class="n">10</span><span data-hf-id="hf-hj3a" class="o">, </span><span data-hf-id="hf-esc3" class="n">20</span><span data-hf-id="hf-ncqv" class="o">)</span></span></div><div data-hf-id="hf-zly6" class="ln" id="s4-l1" style="top:532px"><span data-hf-id="hf-y6v4" class="no">2</span><span data-hf-id="hf-10c6" class="tx" id="s4-t1"><span data-hf-id="hf-4y0r" class="v">x</span><span data-hf-id="hf-d5pz" class="o">, </span><span data-hf-id="hf-5cbs" class="v">y</span><span data-hf-id="hf-r1hz" class="o"> = </span><span data-hf-id="hf-ay3c" class="v">point</span></span></div><div data-hf-id="hf-fbrh" class="ln" id="s4-l2" style="top:608px"><span data-hf-id="hf-eknk" class="no">3</span><span data-hf-id="hf-uumd" class="tx" id="s4-t2"><span data-hf-id="hf-elei" class="f">print</span><span data-hf-id="hf-n16u" class="o">(</span><span data-hf-id="hf-zu9n" class="v">x</span><span data-hf-id="hf-dk10" class="o">, </span><span data-hf-id="hf-yq3k" class="v">y</span><span data-hf-id="hf-myfu" class="o">)</span></span></div><div data-hf-id="hf-8fra" class="dg" id="s4-dg">
+        <div data-hf-id="hf-zycm" class="paren l">(</div><div data-hf-id="hf-owkb" class="paren r">)</div>
+        <div data-hf-id="hf-jthm" class="row two">
+          <div data-hf-id="hf-0ulx" class="cell" id="s4-c0"><span data-hf-id="hf-aesp" class="n">10</span></div>
+          <div data-hf-id="hf-02y4" class="cell" id="s4-c1"><span data-hf-id="hf-ee12" class="n">20</span></div>
+        </div>
+        <div data-hf-id="hf-d642" class="arrows"><span data-hf-id="hf-f488" id="s4-a0">↓</span><span data-hf-id="hf-sky3" id="s4-a1">↓</span></div>
+        <div data-hf-id="hf-1s6a" class="vars"><div data-hf-id="hf-j0pr" class="var" id="s4-v0">x = 10</div><div data-hf-id="hf-67ec" class="var" id="s4-v1">y = 20</div></div>
+      </div><div data-hf-id="hf-k3dz" class="tline prompt" id="s4-o0">$ python tuples.py</div><div data-hf-id="hf-u5pc" class="tline" id="s4-o1" style="top:1102px">10 20</div></div>
+  </div>
+
+  <div data-hf-id="hf-27or" id="s5" class="clip step" data-start="23.5" data-duration="6" data-track-index="1">
+    <div data-hf-id="hf-rcab" class="wrap" id="s5-wrap"><div data-hf-id="hf-mn4e" class="chip" id="s5-chip">STEP 5</div><div data-hf-id="hf-06qj" class="title" id="s5-title">One-item tuple</div><div data-hf-id="hf-ja8r" class="gutter-line"></div><div data-hf-id="hf-4m03" class="ln" id="s5-l0" style="top:456px"><span data-hf-id="hf-c4og" class="no">1</span><span data-hf-id="hf-qez4" class="tx" id="s5-t0"><span data-hf-id="hf-evog" class="v">a</span><span data-hf-id="hf-ipwb" class="o"> = (</span><span data-hf-id="hf-cipw" class="n">5</span><span data-hf-id="hf-mk4t" class="o">)</span></span></div><div data-hf-id="hf-f1fl" class="ln" id="s5-l1" style="top:532px"><span data-hf-id="hf-vepx" class="no">2</span><span data-hf-id="hf-r6mx" class="tx" id="s5-t1"><span data-hf-id="hf-dord" class="v">b</span><span data-hf-id="hf-ibla" class="o"> = (</span><span data-hf-id="hf-gt8c" class="n">5</span><span data-hf-id="hf-jv8n" class="o">,)</span></span></div><div data-hf-id="hf-z59y" class="ln" id="s5-l2" style="top:608px"><span data-hf-id="hf-e6cj" class="no">3</span><span data-hf-id="hf-v4qy" class="tx" id="s5-t2"><span data-hf-id="hf-gkxn" class="f">print</span><span data-hf-id="hf-lu9r" class="o">(</span><span data-hf-id="hf-t5bt" class="f">type</span><span data-hf-id="hf-m8ks" class="o">(</span><span data-hf-id="hf-3ba0" class="v">a</span><span data-hf-id="hf-sxmd" class="o">), </span><span data-hf-id="hf-b2ml" class="f">type</span><span data-hf-id="hf-l1np" class="o">(</span><span data-hf-id="hf-7o19" class="v">b</span><span data-hf-id="hf-ux5i" class="o">))</span></span></div><div data-hf-id="hf-xp85" class="dg" id="s5-dg">
+        <div data-hf-id="hf-qmk0" class="cmp bad" id="s5-p0"><div data-hf-id="hf-3n94" class="big">(5)</div><div data-hf-id="hf-pe1i" class="lab">int</div></div>
+        <div data-hf-id="hf-qs1b" class="cmp good" id="s5-p1"><div data-hf-id="hf-z4gq" class="big">(5,)</div><div data-hf-id="hf-owgp" class="lab">tuple</div></div>
+      </div><div data-hf-id="hf-7i70" class="tline prompt" id="s5-o0">$ python tuples.py</div><div data-hf-id="hf-1agt" class="tline" id="s5-o1" style="top:1102px">&lt;class 'int'&gt; &lt;class 'tuple'&gt;</div></div>
+  </div>
+
+  <div data-hf-id="hf-v07n" id="s6" class="clip step" data-start="29.5" data-duration="6.5" data-track-index="1">
+    <div data-hf-id="hf-iffe" class="wrap" id="s6-wrap"><div data-hf-id="hf-j1z1" class="chip" id="s6-chip">RECAP</div><div data-hf-id="hf-ouj9" class="title" id="s6-title">Remember</div><div data-hf-id="hf-ezii" class="rrow" id="s6-r0"><span data-hf-id="hf-9gry" class="dot"></span><span data-hf-id="hf-uckh"><b data-hf-id="hf-sg5y">Ordered</b><br data-hf-id="hf-x5px"><i data-hf-id="hf-y0j8">items keep their position</i></span></div><div data-hf-id="hf-ixmj" class="rrow" id="s6-r1"><span data-hf-id="hf-zcc2" class="dot"></span><span data-hf-id="hf-l73p"><b data-hf-id="hf-qg5b">Immutable</b><br data-hf-id="hf-rsrt"><i data-hf-id="hf-7a6x">can't be changed after creation</i></span></div><div data-hf-id="hf-a9qo" class="rrow" id="s6-r2"><span data-hf-id="hf-zqn3" class="dot"></span><span data-hf-id="hf-me0s"><b data-hf-id="hf-i3nd">Great for</b><br data-hf-id="hf-szow"><i data-hf-id="hf-bwjw">coordinates, RGB, fixed data</i></span></div><div data-hf-id="hf-u518" class="cta" id="s6-cta">Save this for later</div></div>
+  </div>
+
+  <div data-hf-id="hf-7w1b" id="caps" data-track-kind="captions">
+    <div data-hf-id="hf-daud" id="cap0" class="clip cap" data-start="0.3" data-duration="1.7"><div data-hf-id="hf-4lc4" class="ct">A tuple is an ordered</div></div>
+    <div data-hf-id="hf-r1l1" id="cap1" class="clip cap" data-start="2" data-duration="2.6"><div data-hf-id="hf-g9vl" class="ct">collection, created with parentheses.</div></div>
+    <div data-hf-id="hf-7oyx" id="cap2" class="clip cap" data-start="5.7" data-duration="2.1"><div data-hf-id="hf-iosg" class="ct">Access items by index,</div></div>
+    <div data-hf-id="hf-tdus" id="cap3" class="clip cap" data-start="7.8" data-duration="1.5"><div data-hf-id="hf-foj6" class="ct">starting at zero.</div></div>
+    <div data-hf-id="hf-392i" id="cap4" class="clip cap" data-start="9.3" data-duration="2"><div data-hf-id="hf-nal2" class="ct">Negative counts from the end.</div></div>
+    <div data-hf-id="hf-r0zk" id="cap5" class="clip cap" data-start="11.7" data-duration="1.9"><div data-hf-id="hf-uibt" class="ct">But tuples are immutable.</div></div>
+    <div data-hf-id="hf-an0p" id="cap6" class="clip cap" data-start="13.6" data-duration="1.8"><div data-hf-id="hf-i103" class="ct">Try to change one,</div></div>
+    <div data-hf-id="hf-q4il" id="cap7" class="clip cap" data-start="15.4" data-duration="2"><div data-hf-id="hf-m6to" class="ct">and Python raises an error.</div></div>
+    <div data-hf-id="hf-ibog" id="cap8" class="clip cap" data-start="17.7" data-duration="2.1"><div data-hf-id="hf-16zd" class="ct">You can unpack a tuple</div></div>
+    <div data-hf-id="hf-zpep" id="cap9" class="clip cap" data-start="19.8" data-duration="2.8"><div data-hf-id="hf-svvt" class="ct">into variables in one line.</div></div>
+    <div data-hf-id="hf-xjmz" id="cap10" class="clip cap" data-start="23.7" data-duration="1.7"><div data-hf-id="hf-1x87" class="ct">Careful with one item!</div></div>
+    <div data-hf-id="hf-z743" id="cap11" class="clip cap" data-start="25.4" data-duration="2"><div data-hf-id="hf-4hq2" class="ct">You need a trailing comma,</div></div>
+    <div data-hf-id="hf-1zom" id="cap12" class="clip cap" data-start="27.4" data-duration="2"><div data-hf-id="hf-n0pz" class="ct">or it's not a tuple.</div></div>
+    <div data-hf-id="hf-xxb4" id="cap13" class="clip cap" data-start="29.7" data-duration="1.9"><div data-hf-id="hf-yzm2" class="ct">Use tuples for fixed data,</div></div>
+    <div data-hf-id="hf-59vh" id="cap14" class="clip cap" data-start="31.6" data-duration="1.9"><div data-hf-id="hf-04pw" class="ct">like coordinates or colors.</div></div>
+    <div data-hf-id="hf-x07w" id="cap15" class="clip cap" data-start="33.5" data-duration="2.3"><div data-hf-id="hf-ei3d" class="ct">Follow for more Python!</div></div>
+  </div>
+</div>
+<script src="assets/gsap.min.js"></script>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo("#cap0 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 0.300);
+  tl.to("#cap0 .ct", {"opacity":0,"duration":0.1}, 1.880);
+  tl.fromTo("#cap1 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 2.000);
+  tl.to("#cap1 .ct", {"opacity":0,"duration":0.1}, 4.480);
+  tl.fromTo("#cap2 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 5.700);
+  tl.to("#cap2 .ct", {"opacity":0,"duration":0.1}, 7.680);
+  tl.fromTo("#cap3 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 7.800);
+  tl.to("#cap3 .ct", {"opacity":0,"duration":0.1}, 9.180);
+  tl.fromTo("#cap4 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 9.300);
+  tl.to("#cap4 .ct", {"opacity":0,"duration":0.1}, 11.180);
+  tl.fromTo("#cap5 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 11.700);
+  tl.to("#cap5 .ct", {"opacity":0,"duration":0.1}, 13.480);
+  tl.fromTo("#cap6 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 13.600);
+  tl.to("#cap6 .ct", {"opacity":0,"duration":0.1}, 15.280);
+  tl.fromTo("#cap7 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 15.400);
+  tl.to("#cap7 .ct", {"opacity":0,"duration":0.1}, 17.280);
+  tl.fromTo("#cap8 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 17.700);
+  tl.to("#cap8 .ct", {"opacity":0,"duration":0.1}, 19.680);
+  tl.fromTo("#cap9 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 19.800);
+  tl.to("#cap9 .ct", {"opacity":0,"duration":0.1}, 22.480);
+  tl.fromTo("#cap10 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 23.700);
+  tl.to("#cap10 .ct", {"opacity":0,"duration":0.1}, 25.280);
+  tl.fromTo("#cap11 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 25.400);
+  tl.to("#cap11 .ct", {"opacity":0,"duration":0.1}, 27.280);
+  tl.fromTo("#cap12 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 27.400);
+  tl.to("#cap12 .ct", {"opacity":0,"duration":0.1}, 29.280);
+  tl.fromTo("#cap13 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 29.700);
+  tl.to("#cap13 .ct", {"opacity":0,"duration":0.1}, 31.480);
+  tl.fromTo("#cap14 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 31.600);
+  tl.to("#cap14 .ct", {"opacity":0,"duration":0.1}, 33.380);
+  tl.fromTo("#cap15 .ct", {"opacity":0,"y":14}, {"opacity":1,"y":0,"duration":0.18,"ease":"power2.out"}, 33.500);
+  tl.to("#cap15 .ct", {"opacity":0,"duration":0.1}, 35.680);
+  tl.fromTo("#s1-t0", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.72,"ease":"steps(16)"}, 0.400);
+  tl.fromTo("#s1-t1", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":1.4849999999999999,"ease":"steps(33)"}, 1.320);
+  tl.fromTo("#s1-t2", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.585,"ease":"steps(13)"}, 3.005);
+  tl.fromTo("#s1-dg", {"opacity":0,"y":30}, {"opacity":1,"y":0,"duration":0.5,"ease":"power3.out"}, 4.000);
+  tl.fromTo("#s1-o0", {"opacity":0}, {"opacity":1,"duration":0.2}, 4.100);
+  tl.fromTo("#s1-o1", {"opacity":0}, {"opacity":1,"duration":0.2}, 4.300);
+  tl.to("#s1-wrap", {"opacity":0,"duration":0.12}, 5.360);
+  tl.fromTo("#s2-chip,#s2-title", {"opacity":0,"y":24}, {"opacity":1,"y":0,"duration":0.35,"ease":"power3.out"}, 5.550);
+  tl.fromTo("#s2-t0", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":1.4849999999999999,"ease":"steps(33)"}, 5.900);
+  tl.fromTo("#s2-t1", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.72,"ease":"steps(16)"}, 7.585);
+  tl.fromTo("#s2-t2", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.765,"ease":"steps(17)"}, 8.505);
+  tl.fromTo("#s2-dg", {"opacity":0,"y":30}, {"opacity":1,"y":0,"duration":0.5,"ease":"power3.out"}, 6.300);
+  tl.to("#s2-c0", {"borderColor":"#4ec9b0","backgroundColor":"#1f3a36","duration":0.25,"ease":"power2.out"}, 9.500);
+  tl.to("#s2-c2", {"borderColor":"#4ec9b0","backgroundColor":"#1f3a36","duration":0.25,"ease":"power2.out"}, 10.200);
+  tl.fromTo("#s2-o0", {"opacity":0}, {"opacity":1,"duration":0.2}, 9.300);
+  tl.fromTo("#s2-o1", {"opacity":0}, {"opacity":1,"duration":0.2}, 9.500);
+  tl.fromTo("#s2-o2", {"opacity":0}, {"opacity":1,"duration":0.2}, 10.200);
+  tl.fromTo("#s2-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 5.500);
+  tl.to("#s2-wrap", {"opacity":0,"duration":0.12}, 11.360);
+  tl.fromTo("#s3-chip,#s3-title", {"opacity":0,"y":24}, {"opacity":1,"y":0,"duration":0.35,"ease":"power3.out"}, 11.550);
+  tl.fromTo("#s3-t0", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":1.4849999999999999,"ease":"steps(33)"}, 11.900);
+  tl.fromTo("#s3-t1", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.8099999999999999,"ease":"steps(18)"}, 13.585);
+  tl.fromTo("#s3-dg", {"opacity":0,"y":30}, {"opacity":1,"y":0,"duration":0.5,"ease":"power3.out"}, 12.300);
+  tl.fromTo("#s3-badge", {"opacity":0,"scale":0.8}, {"opacity":1,"scale":1,"duration":0.35,"ease":"back.out(2)"}, 13.700);
+  tl.to("#s3-c0", {"borderColor":"#f48771","backgroundColor":"#3a1f1f","duration":0.2}, 15.100);
+  tl.to("#s3-c0", { keyframes: { x: [0, -14, 14, -9, 9, 0], easeEach: "power1.inOut" }, duration: 0.5 }, 15.100);
+  tl.fromTo("#s3-o0", {"opacity":0}, {"opacity":1,"duration":0.2}, 14.900);
+  tl.fromTo("#s3-o1", {"opacity":0}, {"opacity":1,"duration":0.2}, 15.100);
+  tl.fromTo("#s3-o2", {"opacity":0}, {"opacity":1,"duration":0.2}, 15.100);
+  tl.fromTo("#s3-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 11.500);
+  tl.to("#s3-wrap", {"opacity":0,"duration":0.12}, 17.360);
+  tl.fromTo("#s4-chip,#s4-title", {"opacity":0,"y":24}, {"opacity":1,"y":0,"duration":0.35,"ease":"power3.out"}, 17.550);
+  tl.fromTo("#s4-t0", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.72,"ease":"steps(16)"}, 17.900);
+  tl.fromTo("#s4-t1", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.54,"ease":"steps(12)"}, 18.820);
+  tl.fromTo("#s4-t2", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.5,"ease":"steps(11)"}, 19.560);
+  tl.fromTo("#s4-dg", {"opacity":0,"y":30}, {"opacity":1,"y":0,"duration":0.5,"ease":"power3.out"}, 18.300);
+  tl.fromTo("#s4-a0,#s4-a1,#s4-v0,#s4-v1", {"opacity":0,"y":-16}, {"opacity":1,"y":0,"duration":0.4,"stagger":0.12,"ease":"power3.out"}, 20.700);
+  tl.fromTo("#s4-o0", {"opacity":0}, {"opacity":1,"duration":0.2}, 20.300);
+  tl.fromTo("#s4-o1", {"opacity":0}, {"opacity":1,"duration":0.2}, 20.500);
+  tl.fromTo("#s4-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 17.500);
+  tl.to("#s4-wrap", {"opacity":0,"duration":0.12}, 23.360);
+  tl.fromTo("#s5-chip,#s5-title", {"opacity":0,"y":24}, {"opacity":1,"y":0,"duration":0.35,"ease":"power3.out"}, 23.550);
+  tl.fromTo("#s5-t0", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.5,"ease":"steps(7)"}, 23.900);
+  tl.fromTo("#s5-t1", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":0.5,"ease":"steps(8)"}, 24.600);
+  tl.fromTo("#s5-t2", {"clipPath":"inset(0 100% 0 0)"}, {"clipPath":"inset(0 0% 0 0)","duration":1.035,"ease":"steps(23)"}, 25.300);
+  tl.fromTo("#s5-p0,#s5-p1", {"opacity":0,"y":30}, {"opacity":1,"y":0,"duration":0.45,"stagger":0.25,"ease":"power3.out"}, 26.900);
+  tl.fromTo("#s5-o0", {"opacity":0}, {"opacity":1,"duration":0.2}, 26.700);
+  tl.fromTo("#s5-o1", {"opacity":0}, {"opacity":1,"duration":0.2}, 26.900);
+  tl.fromTo("#s5-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 23.500);
+  tl.to("#s5-wrap", {"opacity":0,"duration":0.12}, 29.360);
+  tl.fromTo("#s6-chip,#s6-title", {"opacity":0,"y":24}, {"opacity":1,"y":0,"duration":0.35,"ease":"power3.out"}, 29.550);
+  tl.fromTo("#s6-r0", {"opacity":0,"x":-40}, {"opacity":1,"x":0,"duration":0.4,"ease":"power3.out"}, 30.000);
+  tl.fromTo("#s6-r1", {"opacity":0,"x":-40}, {"opacity":1,"x":0,"duration":0.4,"ease":"power3.out"}, 30.900);
+  tl.fromTo("#s6-r2", {"opacity":0,"x":-40}, {"opacity":1,"x":0,"duration":0.4,"ease":"power3.out"}, 31.800);
+  tl.fromTo("#s6-cta", {"opacity":0,"scale":0.9}, {"opacity":1,"scale":1,"duration":0.45,"ease":"back.out(1.6)"}, 33.400);
+  tl.fromTo("#s6-wrap", {"opacity":0}, {"opacity":1,"duration":0.15}, 29.500);
+  tl.to("#s6-wrap", {"opacity":0,"duration":0.12}, 35.860);
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
