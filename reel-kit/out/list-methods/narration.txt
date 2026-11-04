@@ -1,0 +1,25 @@
+Eleven Python list methods, explained with code. Let's go one by one.
+
+The append method adds one item at the end of the list.
+
+The clear method removes every item, and leaves an empty list.
+
+The copy method makes a brand new list with the same items. Notice, a is b prints False.
+
+The count method tells you how many times a value appears. Here, two shows up three times.
+
+The extend method adds every item from another list, at the end.
+
+The index method returns the position of the first match. Plum is at index two.
+
+The insert method puts an item at any position you choose. Fig goes in at index one.
+
+The pop method removes the item at a position, and gives it back to you.
+
+The remove method deletes the first item that has that value.
+
+The reverse method flips the order of the list, in place.
+
+The sort method orders the list from smallest to largest.
+
+That's all eleven list methods. Save this cheat sheet, and follow Coding Archives for more Python!
